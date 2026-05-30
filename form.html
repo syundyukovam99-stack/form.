@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Новая заявка</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: #f4f4f0; min-height: 100vh; display: flex; align-items: flex-start; justify-content: center; padding: 40px 16px; }
+  .wrapper { width: 100%; max-width: 620px; }
+  .card { background: #fff; border: 1px solid #e5e5e0; border-radius: 12px; overflow: hidden; }
+  .card-header { padding: 14px 20px; border-bottom: 1px solid #e5e5e0; display: flex; align-items: center; gap: 10px; }
+  .card-header svg { color: #888; flex-shrink: 0; }
+  .card-header span { font-size: 15px; font-weight: 500; color: #1a1a1a; }
+  .card-body { padding: 20px; display: flex; flex-direction: column; gap: 16px; }
+  label.field-label { font-size: 11px; font-weight: 600; color: #888; letter-spacing: .06em; text-transform: uppercase; display: block; margin-bottom: 6px; }
+  .req { color: #e24b4a; }
+  input[type=text], input[type=date], textarea, select {
+    width: 100%; padding: 9px 12px; font-size: 14px; font-family: inherit;
+    border: 1px solid #e0e0da; border-radius: 8px; outline: none;
+    background: #fff; color: #1a1a1a; transition: border-color .15s;
+    -webkit-appearance: none; appearance: none;
+  }
+  input[type=text]:focus, input[type=date]:focus, textarea:focus, select:focus { border-color: #888; }
+  input[type=text].error, textarea.error, select.error { border-color: #e24b4a; }
+  input::placeholder, textarea::placeholder { color: #bbb; }
+  textarea { resize: vertical; line-height: 1.5; min-height: 72px; }
+  .hint { font-size: 11px; color: #aaa; margin-top: 4px; }
+  .row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+  .priority-wrap { position: relative; }
+  .priority-dot { position: absolute; left: 11px; top: 50%; transform: translateY(-50%); width: 8px; height: 8px; border-radius: 50%; background: #EF9F27; pointer-events: none; transition: background .15s; }
+  select#priority { padding-left: 28px; cursor: pointer; }
+  .system-hint { font-size: 11px; color: #666; margin-top: 5px; min-height: 16px; display: flex; align-items: center; gap: 4px; }
+  .system-hint svg { flex-shrink: 0; }
+  .section-label { font-size: 11px; font-weight: 600; color: #888; letter-spacing: .06em; text-transform: uppercase; padding-top: 16px; border-top: 1px solid #e5e5e0; }
+  .toggle-btn { background: none; border: none; cursor: pointer; padding: 0; display: flex; align-items: center; gap: 6px; font-size: 13px; color: #666; font-family: inherit; }
+  .toggle-btn:hover { color: #333; }
+  .toggle-icon { transition: transform .2s; display: flex; }
+  .optional-block { display: none; flex-direction: column; gap: 12px; border-top: 1px solid #e5e5e0; padding-top: 14px; margin-top: 2px; }
+  .optional-block.open { display: flex; }
+  .upload-zone { border: 1px dashed #ccc; border-radius: 8px; padding: 20px; text-align: center; cursor: pointer; color: #aaa; font-size: 13px; transition: border-color .15s; }
+  .upload-zone:hover { border-color: #888; color: #666; }
+  .upload-zone svg { display: block; margin: 0 auto 6px; }
+  .info-banner { background: #eff6ff; border-radius: 8px; padding: 10px 14px; display: flex; gap: 8px; align-items: flex-start; font-size: 13px; color: #3b7dd8; }
+  .error-banner { background: #fef2f2; border-radius: 8px; padding: 10px 14px; display: none; align-items: flex-start; gap: 8px; font-size: 13px; color: #e24b4a; }
+  .error-banner.show { display: flex; }
+  .actions { display: flex; gap: 10px; padding-top: 4px; border-top: 1px solid #e5e5e0; }
+  .btn-primary { flex: 1; padding: 9px 16px; font-size: 14px; font-weight: 500; font-family: inherit; background: #fff; border: 1px solid #ccc; border-radius: 8px; cursor: pointer; color: #1a1a1a; display: flex; align-items: center; justify-content: center; gap: 6px; transition: background .15s; }
+  .btn-primary:hover { background: #f5f5f0; }
+  .btn-secondary { padding: 9px 14px; font-size: 13px; font-family: inherit; background: none; border: none; cursor: pointer; color: #888; border-radius: 8px; }
+  .btn-secondary:hover { color: #444; background: #f5f5f0; }
+  .success-banner { background: #f0fdf4; border-radius: 8px; padding: 10px 14px; display: none; align-items: center; gap: 8px; font-size: 13px; color: #16a34a; }
+  .success-banner.show { display: flex; }
+</style>
+</head>
+<body>
+<div class="wrapper">
+  <div class="card">
+
+    <div class="card-header">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="12" y1="18" x2="12" y2="12"/><line x1="9" y1="15" x2="15" y2="15"/></svg>
+      <span>Новая заявка</span>
+    </div>
+
+    <div class="card-body">
+
+      <div>
+        <label class="field-label" for="title">Тема <span class="req">*</span></label>
+        <input type="text" id="title" placeholder="Коротко опишите суть задачи" maxlength="200">
+        <p class="hint">10–200 символов</p>
+      </div>
+
+      <div class="row">
+        <div>
+          <label class="field-label" for="priority">Приоритет <span class="req">*</span></label>
+          <div class="priority-wrap">
+            <span class="priority-dot" id="dot"></span>
+            <select id="priority" onchange="updatePriority()">
+              <option value="">Выберите...</option>
+              <option value="critical">Критический</option>
+              <option value="high">Высокий</option>
+              <option value="medium" selected>Средний</option>
+              <option value="low">Низкий</option>
+            </select>
+          </div>
+          <p class="system-hint" id="priority-hint">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+            Рекомендуется: Высокий — срок через 1 день
+          </p>
+        </div>
+        <div>
+          <label class="field-label" for="deadline">Срок исполнения <span class="req">*</span></label>
+          <input type="date" id="deadline">
+        </div>
+      </div>
+
+      <p class="section-label">Обязательные поля</p>
+
+      <div>
+        <label class="field-label" for="description">Описание проблемы <span class="req">*</span></label>
+        <textarea id="description" rows="3" placeholder="Что именно не работает или что требуется сделать?"></textarea>
+        <p class="hint">Минимум 50 символов</p>
+      </div>
+
+      <div>
+        <label class="field-label" for="expected">Ожидаемый результат <span class="req">*</span></label>
+        <textarea id="expected" rows="2" placeholder="Что должно произойти после выполнения задачи?"></textarea>
+      </div>
+
+      <div>
+        <button class="toggle-btn" onclick="toggleOptional()" type="button">
+          <span class="toggle-icon" id="toggle-icon">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+          </span>
+          Дополнительные поля
+        </button>
+
+        <div class="optional-block" id="optional">
+
+          <div>
+            <label class="field-label" for="steps">Шаги воспроизведения / контекст</label>
+            <textarea id="steps" rows="2" placeholder="Последовательность действий, приводящих к проблеме..."></textarea>
+          </div>
+
+          <div>
+            <label class="field-label" for="actual">Фактический результат</label>
+            <textarea id="actual" rows="2" placeholder="Что происходит сейчас, в чём расхождение с ожидаемым?"></textarea>
+          </div>
+
+          <div>
+            <label class="field-label">Вложения</label>
+            <div class="upload-zone" onclick="document.getElementById('file-input').click()">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><polyline points="16 16 12 12 8 16"/><line x1="12" y1="12" x2="12" y2="21"/><path d="M20.39 18.39A5 5 0 0 0 18 9h-1.26A8 8 0 1 0 3 16.3"/></svg>
+              <span id="upload-label">Перетащите файл или нажмите для выбора</span>
+            </div>
+            <input type="file" id="file-input" style="display:none" onchange="updateUploadLabel()">
+          </div>
+
+          <div class="info-banner">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" flex-shrink="0" style="flex-shrink:0;margin-top:1px"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+            Чем подробнее описание — тем быстрее исполнитель приступит к работе
+          </div>
+
+        </div>
+      </div>
+
+      <div class="error-banner" id="error-banner">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="flex-shrink:0;margin-top:1px"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+        <span id="error-text">Заполните обязательные поля</span>
+      </div>
+
+      <div class="success-banner" id="success-banner">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="flex-shrink:0"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+        Заявка отправлена
+      </div>
+
+      <div class="actions">
+        <button class="btn-primary" onclick="submitForm()" type="button">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+          Отправить заявку
+        </button>
+        <button class="btn-secondary" onclick="saveDraft()" type="button">Сохранить черновик</button>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<script>
+  const dotColors = { critical: '#E24B4A', high: '#EF9F27', medium: '#EF9F27', low: '#B4B2A9' };
+  const hints = {
+    critical: 'Задача помечается как критическая — требует немедленного внимания',
+    high: 'Рекомендуется: Высокий — срок через 1 день',
+    medium: '',
+    low: ''
+  };
+
+  function updatePriority() {
+    const v = document.getElementById('priority').value;
+    document.getElementById('dot').style.background = dotColors[v] || '#ccc';
+    const h = document.getElementById('priority-hint');
+    h.innerHTML = hints[v]
+      ? `<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>${hints[v]}`
+      : '';
+  }
+
+  let optOpen = false;
+  function toggleOptional() {
+    optOpen = !optOpen;
+    document.getElementById('optional').classList.toggle('open', optOpen);
+    document.getElementById('toggle-icon').style.transform = optOpen ? 'rotate(180deg)' : '';
+  }
+
+  function updateUploadLabel() {
+    const f = document.getElementById('file-input').files[0];
+    if (f) document.getElementById('upload-label').textContent = f.name;
+  }
+
+  function submitForm() {
+    const title = document.getElementById('title').value.trim();
+    const description = document.getElementById('description').value.trim();
+    const expected = document.getElementById('expected').value.trim();
+    const deadline = document.getElementById('deadline').value;
+    const priority = document.getElementById('priority').value;
+
+    const missing = [];
+    if (title.length < 10) missing.push('Тема');
+    if (description.length < 50) missing.push('Описание проблемы');
+    if (!expected) missing.push('Ожидаемый результат');
+    if (!deadline) missing.push('Срок исполнения');
+    if (!priority) missing.push('Приоритет');
+
+    ['title','description','expected','deadline','priority'].forEach(id => {
+      document.getElementById(id).classList.remove('error');
+    });
+
+    const errBanner = document.getElementById('error-banner');
+    const sucBanner = document.getElementById('success-banner');
+
+    if (missing.length > 0) {
+      errBanner.querySelector('#error-text').textContent = 'Заполните обязательные поля: ' + missing.join(', ');
+      errBanner.classList.add('show');
+      sucBanner.classList.remove('show');
+      if (title.length < 10) document.getElementById('title').classList.add('error');
+      if (description.length < 50) document.getElementById('description').classList.add('error');
+      if (!expected) document.getElementById('expected').classList.add('error');
+      if (!deadline) document.getElementById('deadline').classList.add('error');
+      if (!priority) document.getElementById('priority').classList.add('error');
+    } else {
+      errBanner.classList.remove('show');
+      sucBanner.classList.add('show');
+      setTimeout(() => sucBanner.classList.remove('show'), 3000);
+    }
+  }
+
+  function saveDraft() {
+    const btn = event.target;
+    btn.textContent = 'Черновик сохранён ✓';
+    setTimeout(() => btn.textContent = 'Сохранить черновик', 2000);
+  }
+
+  updatePriority();
+</script>
+</body>
+</html>
